@@ -51,7 +51,7 @@ export const constantRoutes = [
       path: 'dashboard',
       name: 'Dashboard',
       component: () => import('@/views/dashboard/index'),
-      meta: { title: 'Dashboard', icon: 'dashboard' }
+      meta: { title: '统计', icon: 'dashboard' }
     }]
   },
 
@@ -60,7 +60,7 @@ export const constantRoutes = [
     component: Layout,
     redirect: '/example/table',
     name: 'Example',
-    meta: { title: 'Example', icon: 'example' },
+    meta: { title: '例子', icon: 'example' },
     children: [
       {
         path: 'table',
@@ -98,6 +98,20 @@ export const constantRoutes = [
         name: '需求',
         component: () => import('@/views/demand/index'),
         meta: { title: '需求', icon: 'form' }
+      }
+    ]
+  },
+
+  {
+    path: '/problemsync',
+    component: Layout,
+    // redirect: '/problemsync/index',
+    children: [
+      {
+        path: 'index',
+        name: 'problemsync',
+        component: () => import('@/views/problemSync/index'),
+        meta: { title: '问题同步', icon: 'form' }
       }
     ]
   },

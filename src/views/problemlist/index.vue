@@ -76,6 +76,9 @@
           <el-button  v-if="row.status!='resolved'" type="primary" size="mini" @click="handleModifyStatus(row,'resolved')">
             同步问题
           </el-button>
+          <el-button  size="mini">
+            编辑问题
+          </el-button>
           <el-button  size="mini" type="danger" @click="handleDelete(row,$index)">
             删除问题
           </el-button>

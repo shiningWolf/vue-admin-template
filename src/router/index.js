@@ -115,10 +115,10 @@ export const constantRoutes = [
         meta: { title: '分支类型管理', icon: 'form' }
       },
       {
-        path: 'addproblem',
-        name: 'addproblem',
-        component: () => import('@/views/addproblem'),
-        meta: { title: '增加问题', icon: 'form' }
+        path: 'problem-list',
+        name: 'problem-list',
+        component: () => import('@/views/problemlist'),
+        meta: { title: '问题列表', icon: 'form' }
       },
       {
         path: 'branchsync',

@@ -105,13 +105,26 @@ export const constantRoutes = [
   {
     path: '/problemsync',
     component: Layout,
-    // redirect: '/problemsync/index',
+    redirect: '/problemsync/index',
+    meta: { title: '问题同步', icon: 'example' },
     children: [
       {
         path: 'index',
         name: 'problemsync',
-        component: () => import('@/views/problemSync/index'),
-        meta: { title: '问题同步', icon: 'form' }
+        component: () => import('@/views/branchmanager'),
+        meta: { title: '分支类型管理', icon: 'form' }
+      },
+      {
+        path: 'addproblem',
+        name: 'addproblem',
+        component: () => import('@/views/addproblem'),
+        meta: { title: '增加问题', icon: 'form' }
+      },
+      {
+        path: 'branchsync',
+        name: 'branchsync',
+        component: () => import('@/views/branchsync'),
+        meta: { title: '未同步分支列表', icon: 'form' }
       }
     ]
   },

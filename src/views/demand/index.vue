@@ -2,21 +2,21 @@
   <div class="app-container">
     <div class="filter-container">
       <el-input v-model="listQuery.id" placeholder="编号" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
-       <el-input v-model="listQuery.name" placeholder="工号" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
-        <el-date-picker
-          v-model="daterange"
-          type="daterange"
-          range-separator="至"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期">
-        </el-date-picker>
+      <el-input v-model="listQuery.name" placeholder="工号" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-date-picker
+        v-model="daterange"
+        type="daterange"
+        range-separator="至"
+        start-placeholder="开始日期"
+        end-placeholder="结束日期"
+/>
       <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         查询
       </el-button>
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
         添加
       </el-button>
-      <el-button  :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">
+      <el-button :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">
         导出
       </el-button>
     </div>
@@ -56,9 +56,11 @@
           <span style="color:red;">{{ row.excuter }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="状态" class-name="status-col" width="100" 
-      :filters="statusOptions.map(text => {return {text,value:text}})"
-      :filter-method="filterStatus"
+      <el-table-column
+label="状态"
+class-name="status-col" width="100"
+                       :filters="statusOptions.map(text => {return {text,value:text}})"
+                       :filter-method="filterStatus"
       >
         <template slot-scope="{row}">
           <el-tag :type="row.status | statusFilter">
@@ -74,7 +76,7 @@
           <el-button v-if="row.status!='resolved'" size="mini" type="success" @click="handleModifyStatus(row,'resolved')">
             完成需求
           </el-button>
-          <el-button type="warning" v-if="row.status!='rejected'" size="mini" @click="handleModifyStatus(row,'rejected')">
+          <el-button v-if="row.status!='rejected'" type="warning" size="mini" @click="handleModifyStatus(row,'rejected')">
             驳回需求
           </el-button>
         </template>
@@ -88,7 +90,7 @@
         <el-form-item label="内容" prop="content">
           <el-input v-model="temp.content" />
         </el-form-item>
-        <el-form-item label="状态" v-if="dialogStatus!=='create'">
+        <el-form-item v-if="dialogStatus!=='create'" label="状态">
           <el-select v-model="temp.status" class="filter-item" placeholder="Please select">
             <el-option v-for="item in statusOptions" :key="item" :label="item" :value="item" />
           </el-select>
@@ -108,14 +110,14 @@
     </el-dialog>
 
     <el-dialog :visible.sync="dialogHistoryVisible" title="历史记录">
-      <el-card class="box-card" v-for="(item,index) in history" :key="index">
-          <div slot="header" >
-            <span>{{item.timestamp}}</span>
-          </div>
-          <div>
-            {{item.content }}
-          </div>
-        </el-card>
+      <el-card v-for="(item,index) in history" class="box-card" :key="index">
+        <div slot="header">
+          <span>{{ item.timestamp }}</span>
+        </div>
+        <div>
+          {{ item.content }}
+        </div>
+      </el-card>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="dialogHistoryVisible = false">确认</el-button>
       </span>
@@ -124,9 +126,9 @@
 </template>
 
 <script>
-import { fetchList, fetchDetail, createDemand, updateDemand ,demandHistory} from '@/api/demand'
+import { fetchList, fetchDetail, createDemand, updateDemand , demandHistory } from '@/api/demand'
 import { parseTime } from '@/utils'
-//import Pagination from '@/components/Pagination' // secondary package based on el-pagination
+// import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 const calendarTypeOptions = [
   { key: 'CN', display_name: 'China' },
   { key: 'US', display_name: 'USA' },
@@ -135,20 +137,20 @@ const calendarTypeOptions = [
 ]
 // arr to obj, such as { CN : "China", US : "USA" }
 export default {
-  name: 'demandList',
+  name: 'DemandList',
   filters: {
     statusFilter(status) {
       const statusMap = {
         resolved: 'success',
         pending: 'info',
-        rejected: 'danger'                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
+        rejected: 'danger'
       }
       return statusMap[status]
     }
   },
   data() {
     return {
-      daterange:'',
+      daterange: '',
       tableKey: 0,
       list: null,
       total: 0,
@@ -164,7 +166,7 @@ export default {
       temp: {
         id: undefined,
         remark: '',
-        timestamp:undefined,
+        timestamp: undefined,
         content: '',
         status: 'resloved'
       },
@@ -174,10 +176,10 @@ export default {
         update: '编辑',
         create: '创建'
       },
-      history:null,
+      history: null,
       dialogHistoryVisible: false,
       rules: {
-        type: [{ required: true, message: '内容必须填写', trigger: 'blur' }],
+        type: [{ required: true, message: '内容必须填写', trigger: 'blur' }]
       },
       downloadLoading: false
     }
@@ -201,13 +203,13 @@ export default {
       this.getList()
     },
     filterStatus(value, row) {
-        return row.status === value;
+      return row.status === value
     },
     showHistory() {
       this.dialogHistoryVisible = true
       demandHistory().then((response) => {
-            this.history = response.data.items
-          })
+        this.history = response.data.items
+      })
     },
     handleModifyStatus(row, status) {
       this.$message({
@@ -255,7 +257,7 @@ export default {
           this.temp.id = parseInt(Math.random() * 100)
           this.temp.author = 'yosgi'
           this.temp.excuter = 'yosgi'
-          this.temp.timestamp = parseTime(+new Date(),'{y}-{m}-{d}')
+          this.temp.timestamp = parseTime(+new Date(), '{y}-{m}-{d}')
           createDemand(this.temp).then(() => {
             this.list.unshift(this.temp)
             this.dialogFormVisible = false
@@ -282,7 +284,7 @@ export default {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           const tempData = Object.assign({}, this.temp)
-          tempData.timestamp = parseTime(+new Date(),'{y}-{m}-{d}')
+          tempData.timestamp = parseTime(+new Date(), '{y}-{m}-{d}')
           updateDemand(tempData).then(() => {
             const index = this.list.findIndex(v => v.id === this.temp.id)
             this.list.splice(index, 1, tempData)

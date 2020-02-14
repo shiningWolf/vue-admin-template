@@ -1,5 +1,6 @@
 <template>
   <div class="dashboard-container">
+
     <el-table
       v-loading="listLoading"
       :data="list"
@@ -13,14 +14,14 @@
           {{ scope.$index }}
         </template>
       </el-table-column>
-      <el-table-column label="问题描述" width="180" align="center">
-        <template slot-scope="scope">
-          {{ scope.row.title }}
-        </template>
-      </el-table-column>
       <el-table-column label="当前分支" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.author }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="问题描述" width="300" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.title }}
         </template>
       </el-table-column>
       <el-table-column label="分支类型" width="130" align="center">
@@ -40,6 +41,7 @@
         </template>
       </el-table-column>
     </el-table>
+
   </div>
 </template>
 

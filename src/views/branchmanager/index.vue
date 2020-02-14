@@ -1,6 +1,5 @@
 <template>
   <div class="branchmanager">
-    <h3>分支类型列表</h3>
     <div style="margin-bottom: 10px">
       <el-button type="primary" @click="dialogFormVisible=true">添加</el-button>
     </div>
@@ -23,12 +22,26 @@
           {{ scope.row.branch }}
         </template>
       </el-table-column>
-      <el-table-column label="分支类型" width="220" align="center">
+      <el-table-column
+        label="分支类型"
+        width="220"
+        align="center"
+        :filters="filterTypeData"
+        :filter-method="filterType"
+        filter-placement="bottom-end"
+      >
         <template slot-scope="scope">
           <span>{{ scope.row.branchType }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="分支责任人" width="200" align="center">
+      <el-table-column
+        label="分支责任人"
+        width="200"
+        align="center"
+        :filters="filterPersonData"
+        :filter-method="filterPerson"
+        filter-placement="bottom-end"
+      >
         <template slot-scope="scope">
           {{ scope.row.branchManager }}
         </template>
@@ -36,8 +49,8 @@
       <el-table-column label="操作" width="200" align="center">
         <template slot-scope="scope">
           <div>
-            <el-button plain icon="el-icon-edit" @click="editFn(scope.row)" />
-            <el-button slot="reference" plain icon="el-icon-delete" @click="deleteFn(scope.row)" />
+            <el-button type="primary" size="mini" @click="editFn(scope.row)">编辑</el-button>
+            <el-button slot="reference" size="mini" type="warning" @click="deleteFn(scope.row)">删除</el-button>
           </div>
         </template>
       </el-table-column>
@@ -56,6 +69,7 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
+
         <el-button @click="dialogFormVisible = false">
           取消
         </el-button>
@@ -97,6 +111,28 @@ export default {
     }
   },
   computed: {
+    filterTypeData() {
+      const data = []
+      this.list.forEach(list => {
+        if (!data.some(item => {
+          return item.value === list.branchType
+        })) {
+          data.push({ text: list.branchType, value: list.branchType })
+        }
+      })
+      return data
+    },
+    filterPersonData() {
+      const data = []
+      this.list.forEach(list => {
+        if (!data.some(item => {
+          return item.value === list.branchManager
+        })) {
+          data.push({ text: list.branchManager, value: list.branchManager })
+        }
+      })
+      return data
+    },
     ...mapGetters([
       'name'
     ])
@@ -115,7 +151,12 @@ export default {
     },
     deleteFn(row) {
       this.list = this.list.filter(item => item.id !== row.id)
-      console.log(row)
+    },
+    filterType(value, row) {
+      return row.branchType === value
+    },
+    filterPerson(value, row) {
+      return row.branchManager === value
     },
     handleConfirm() {
       // updateBranch().then(() => {

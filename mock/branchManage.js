@@ -1,7 +1,7 @@
 import Mock from 'mockjs'
 
 const data = Mock.mock({
-  'items|15': [{
+  'items|30': [{
     'id|+1': 1,
     branch: '@sentence(4, 6)',
     branchManager: '@sentence(1, 2)',

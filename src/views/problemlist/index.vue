@@ -76,7 +76,7 @@
           <el-button  v-if="row.status!='resolved'" type="primary" size="mini" @click="handleModifyStatus(row,'resolved')">
             同步问题
           </el-button>
-          <el-button  size="mini">
+          <el-button  size="mini" @click="handleUpdate(row)">
             编辑问题
           </el-button>
           <el-button  size="mini" type="danger" @click="handleDelete(row,$index)">
@@ -88,15 +88,21 @@
 
     <!-- <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" /> -->
 
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
+    <el-dialog title="编辑" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="70px" style="width: 400px; margin-left:50px;">
-        <el-form-item label="内容" prop="content">
-          <el-input v-model="temp.content" />
+        <el-form-item label="问题名称" prop="name">
+          <el-input v-model="temp.name" />
+        </el-form-item>
+        <el-form-item label="当前分支" prop="current">
+          <el-input v-model="temp.current" />
         </el-form-item>
         <el-form-item label="状态" v-if="dialogStatus!=='create'">
           <el-select v-model="temp.status" class="filter-item" placeholder="Please select">
             <el-option v-for="item in statusOptions" :key="item" :label="item" :value="item" />
           </el-select>
+        </el-form-item>
+        <el-form-item label="分支类型" prop="type">
+          <el-input v-model="temp.type" />
         </el-form-item>
         <el-form-item label="备注">
           <el-input v-model="temp.remark" :autosize="{ minRows: 2, maxRows: 4}" type="textarea" placeholder="Please input" />
@@ -106,7 +112,7 @@
         <el-button @click="dialogFormVisible = false">
           取消
         </el-button>
-        <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">
+        <el-button type="primary" @click="updateData()">
           确认
         </el-button>
       </div>
@@ -129,7 +135,7 @@
 </template>
 
 <script>
-import { fetchList, fetchDetail, createDemand, updateDemand ,demandHistory} from '@/api/problem'
+import { fetchList, fetchDetail, updateProblem , demandHistory} from '@/api/problem'
 import { parseTime } from '@/utils'
 import problem from '../../../mock/problem'
 //import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -160,7 +166,7 @@ export default {
     return {
       daterange:'',
       tableKey: 0,
-      list: null,
+      list: [],
       total: 0,
       listLoading: true,
       listQuery: {
@@ -175,7 +181,9 @@ export default {
         id: undefined,
         remark: '',
         timestamp:undefined,
-        content: '',
+        name: '',
+        current: '',
+        type:'',
         status: 'resloved'
       },
       dialogFormVisible: false,
@@ -187,7 +195,7 @@ export default {
       history:null,
       dialogHistoryVisible: false,
       rules: {
-        type: [{ required: true, message: '内容必须填写', trigger: 'blur' }],
+      
       },
       downloadLoading: false
     }
@@ -305,7 +313,7 @@ export default {
         if (valid) {
           const tempData = Object.assign({}, this.temp)
           tempData.timestamp = parseTime(+new Date(),'{y}-{m}-{d}')
-          updateDemand(tempData).then(() => {
+          updateProblem(tempData).then(() => {
             const index = this.list.findIndex(v => v.id === this.temp.id)
             this.list.splice(index, 1, tempData)
             this.dialogFormVisible = false

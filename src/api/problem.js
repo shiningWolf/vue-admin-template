@@ -7,3 +7,10 @@ export function fetchList(params) {
     params
   })
 }
+export function updateDemand(params) {
+  return request({
+    url: '/vue-admin-template/problem/update',
+    method: 'post',
+    params
+  })
+}

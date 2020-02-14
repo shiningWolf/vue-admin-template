@@ -26,7 +26,20 @@ export default [
           }
         }
       }
-    }
+    },
+    {
+      url: '/vue-admin-template/problem/update',
+      type: 'post',
+      response: config => {
+        const items = data.items
+        return {
+          code: 20000,
+          data: {
+            ok:true
+          }
+        }
+      }
+    },
   ]
 
   

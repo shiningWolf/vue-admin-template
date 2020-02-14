@@ -5,13 +5,15 @@ import user from './user'
 import table from './table'
 import demand from './demand'
 import problem from './problem'
-import branchManage from './branchManage'
+// import branchManage from './branchManage'
+import inCharge from './inCharge'
 const mocks = [
   ...user,
   ...table,
   ...demand,
   ...problem,
-  ...branchManage
+  // ...branchManage,
+  ...inCharge
 ]
 
 // for front mock

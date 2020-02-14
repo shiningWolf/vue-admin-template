@@ -7,17 +7,24 @@ export function getBranchList(params) {
     params
   })
 }
-export function createBranch(params) {
+export function createBranch(data) {
   return request({
     url: '/vue-admin-template/branchmanage/create',
     method: 'post',
-    params
+    data
   })
 }
-export function updateBranch(params) {
+export function deleteBranch(data) {
+  return request({
+    url: '/vue-admin-template/branchmanage/delete',
+    method: 'post',
+    data
+  })
+}
+export function updateBranch(data) {
   return request({
     url: '/vue-admin-template/branchmanage/update',
     method: 'post',
-    params
+    data
   })
 }

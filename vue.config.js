@@ -41,11 +41,12 @@ module.exports = {
       [process.env.VUE_APP_BASE_API]: {
         target: `http://justib.vipgz4.idcfengye.com/`,
         changeOrigin: true,
-        pathRewrite: {
-          ['^' + process.env.VUE_APP_BASE_API]: ''
-        }
+        ws: true
+        // pathRewrite: {
+        //   ['^' + process.env.VUE_APP_BASE_API]: ''
+        // }
       }
-    },
+    }
   },
   configureWebpack: {
     // provide the app's title in webpack's name field, so that

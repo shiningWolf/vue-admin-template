@@ -19,7 +19,7 @@
       </el-table-column>
       <el-table-column label="分支" align="center">
         <template slot-scope="scope">
-          {{ scope.row.branch }}
+          {{ scope.row.name }}
         </template>
       </el-table-column>
       <el-table-column
@@ -31,7 +31,7 @@
         filter-placement="bottom-end"
       >
         <template slot-scope="scope">
-          <span>{{ scope.row.branchType }}</span>
+          <span>{{ scope.row.type }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -43,7 +43,7 @@
         filter-placement="bottom-end"
       >
         <template slot-scope="scope">
-          {{ scope.row.branchManager }}
+          {{ scope.row.userId }}
         </template>
       </el-table-column>
       <el-table-column label="操作" width="200" align="center">
@@ -56,16 +56,16 @@
       </el-table-column>
     </el-table>
 
-    <el-dialog :title="isEdit ? '编辑' : '添加'" :visible.sync="dialogFormVisible">
+    <el-dialog :title="isEdit ? '编辑' : '添加'" :visible.sync="dialogFormVisible" @close="handleClose">
       <el-form ref="dataForm" :rules="rules" :model="option" label-position="left" label-width="100px" style="width: 600px; margin-left:50px;">
-        <el-form-item label="分支" prop="branch">
-          <el-input v-model="option.branch" />
+        <el-form-item label="分支" prop="name">
+          <el-input v-model="option.name" />
         </el-form-item>
-        <el-form-item label="分支类型" prop="branch">
-          <el-input v-model="option.branchType" />
+        <el-form-item label="分支类型" prop="type">
+          <el-input v-model="option.type" />
         </el-form-item>
-        <el-form-item label="分支责任人" prop="branch">
-          <el-input v-model="option.branchManager" />
+        <el-form-item label="分支责任人" prop="userId">
+          <el-input v-model="option.userId" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -83,7 +83,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { getBranchList, updateBranch } from '@/api/branchManage'
+import { getBranchList, createBranch, deleteBranch, updateBranch } from '@/api/branchManage'
 
 export default {
   name: 'Branchmanager',
@@ -96,7 +96,9 @@ export default {
       isEdit: false,
       dialogFormVisible: false,
       rules: {
-        branch: [{ required: true, message: '内容必须填写', trigger: 'blur' }]
+        name: [{ required: true, message: '内容必须填写', trigger: 'blur' }],
+        type: [{ required: true, message: '内容必须填写', trigger: 'blur' }],
+        userId: [{ required: true, message: '内容必须填写', trigger: 'blur' }]
       },
       option: {
 
@@ -115,9 +117,9 @@ export default {
       const data = []
       this.list.forEach(list => {
         if (!data.some(item => {
-          return item.value === list.branchType
+          return item.value === list.type
         })) {
-          data.push({ text: list.branchType, value: list.branchType })
+          data.push({ text: list.type, value: list.type })
         }
       })
       return data
@@ -126,9 +128,9 @@ export default {
       const data = []
       this.list.forEach(list => {
         if (!data.some(item => {
-          return item.value === list.branchManager
+          return item.value === list.userId
         })) {
-          data.push({ text: list.branchManager, value: list.branchManager })
+          data.push({ text: list.userId, value: list.userId })
         }
       })
       return data
@@ -138,32 +140,83 @@ export default {
     ])
   },
   mounted() {
-    getBranchList(this.listQuery).then(json => {
-      console.log(json)
-      this.list = json.data.items
-    })
+    this.getData()
   },
   methods: {
+    getData() {
+      return getBranchList(this.listQuery).then(json => {
+        this.list = json.data
+      })
+    },
     editFn(row) {
       this.isEdit = true
       this.dialogFormVisible = true
       this.option = row
     },
     deleteFn(row) {
-      this.list = this.list.filter(item => item.id !== row.id)
+      // this.list = this.list.filter(item => item.id !== row.id)
+      const obj = {
+        _id: row._id
+      }
+      this.listLoading = true
+      deleteBranch(obj).then(json => {
+        if (json.code === 20000) {
+          this.$message({
+            message: '操作成功',
+            type: 'success'
+          })
+          this.getData().then(() => {
+            this.listLoading = false
+          })
+        }
+      })
+      console.log(row)
     },
     filterType(value, row) {
-      return row.branchType === value
+      return row.type === value
     },
     filterPerson(value, row) {
-      return row.branchManager === value
+      return row.userId === value
     },
     handleConfirm() {
-      // updateBranch().then(() => {
-      //   this.list.unshift(this.option)
-      // })
-      this.dialogFormVisible = false
-      this.list.unshift(this.option)
+      this.$refs['dataForm'].validate((valid) => {
+        if (valid) {
+          // 添加
+          if (!this.isEdit) {
+            createBranch(this.option).then((json) => {
+              if (json.code === 20000) {
+                this.getData()
+                this.$message({
+                  message: '操作成功',
+                  type: 'success'
+                })
+                this.dialogFormVisible = false
+              }
+            })
+          } else {
+            // 编辑
+            updateBranch(this.option).then(json => {
+              if (json.code === 20000) {
+                this.getData()
+                this.option = {}
+                this.isEdit = false
+                this.$message({
+                  message: '操作成功',
+                  type: 'success'
+                })
+                this.dialogFormVisible = false
+              }
+            })
+          }
+        } else {
+          return false
+        }
+      })
+    },
+    handleClose() {
+      console.log('close')
+      this.isEdit = false
+      this.option = {}
     }
   }
 }

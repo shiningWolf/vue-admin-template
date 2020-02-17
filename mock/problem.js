@@ -1,15 +1,20 @@
 import Mock from 'mockjs'
-
+let branchListPool = (() => {
+  let pool = []
+  for(let i = 0 ; i <30 ; i++) {
+    pool.push('分支' + i)
+  }
+  return pool
+} )()
+console.log(branchListPool)
 const data = Mock.mock({
   'items|30': [{
-    'id|+1': 1,
+    '_id|+1': 1,
     name: '@sentence(2, 4)',
-    current:'@sentence(2, 8)',
-    'type|1': ['分支类型1', '分支类型2', '分支类型3','分支类型4','分支类型5','分支类型6'],
-    'status|1': ['resolved', 'pending'],
-    author: 'author',
+    'branchId|+1':branchListPool,
+    branchList:branchListPool,
+    userId:'@sentence(2, 4)',
     timestamp: '@datetime(yyyy-MM-dd)',
-    pageviews: '@integer(300, 5000)'
   }]
 })
 export default [

@@ -1,6 +1,6 @@
 import Mock from 'mockjs'
 import { param2Obj } from '../src/utils'
-
+import role from './role'
 import user from './user'
 import table from './table'
 import demand from './demand'
@@ -11,7 +11,8 @@ const mocks = [
   ...table,
   ...demand,
   ...problem,
-  ...branchManage
+  ...branchManage,
+  ...role
 ]
 
 // for front mock

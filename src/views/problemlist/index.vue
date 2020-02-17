@@ -28,9 +28,9 @@
       style="width: 100%;"
       @sort-change="sortChange"
     >
-      <el-table-column label="序号" prop="id" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
+      <el-table-column label="序号" prop="_id" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
-          <span>{{ row.id }}</span>
+          <span>{{ row._id }}</span>
         </template>
       </el-table-column>
       <el-table-column label="问题名称" width="160px" align="center">
@@ -40,7 +40,7 @@
       </el-table-column>
        <el-table-column label="提出人" width="110px" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.author }}</span>
+          <span>{{ row.userId }}</span>
         </template>
       </el-table-column>
        <el-table-column label="提出时间" width="110px" align="center">
@@ -136,6 +136,7 @@
 
 <script>
 import { fetchList, fetchDetail, updateProblem , demandHistory} from '@/api/problem'
+import {getBranchList} from '@/api/branchManage'
 import { parseTime } from '@/utils'
 import problem from '../../../mock/problem'
 //import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -206,12 +207,11 @@ export default {
   methods: {
     getList() {
       this.listLoading = true
-      fetchList(this.listQuery).then(response => {
-        this.list = response.data.items
-        this.total = response.data.total
-        setTimeout(() => {
-          this.listLoading = false
-        }, 1 * 1000)
+      Promise.all([getBranchList(),fetchList()]).then(([res1,res2]) => {
+        console.log(res1,res2)
+        // this.list = res1
+        // console.log(res2)
+        this.listLoading = false
       })
     },
     handleFilter() {

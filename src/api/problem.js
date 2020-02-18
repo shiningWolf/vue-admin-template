@@ -7,10 +7,24 @@ export function fetchList(params) {
     params
   })
 }
-export function updateDemand(params) {
+export function updateProblem(data) {
   return request({
     url: '/vue-admin-template/problem/update',
     method: 'post',
-    params
+    data
+  })
+}
+export function deleteProblem(data) {
+  return request({
+    url: '/vue-admin-template/problem/delete',
+    method: 'post',
+    data
+  })
+}
+export function createProblem(data) {
+  return request({
+    url: '/vue-admin-template/problem/create',
+    method: 'post',
+    data
   })
 }

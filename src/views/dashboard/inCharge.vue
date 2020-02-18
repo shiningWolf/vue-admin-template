@@ -16,7 +16,7 @@
       </el-table-column>
       <el-table-column label="当前分支" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.branch }}</span>
+          <span>{{ scope.row.branchObj && scope.row.branchObj.name }}</span>
         </template>
       </el-table-column>
       <el-table-column label="问题描述" width="250" align="center">
@@ -36,7 +36,7 @@
       </el-table-column>
       <el-table-column label="分支类型" width="100" align="center">
         <template slot-scope="scope">
-          {{ scope.row.branchType }}
+          {{ scope.row.branchObj && scope.row.branchObj.type }}
         </template>
       </el-table-column>
       <el-table-column class-name="status-col" label="同步状态" width="100" align="center">

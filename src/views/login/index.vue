@@ -110,6 +110,7 @@ export default {
         if (valid) {
           this.loading = true
           this.$store.dispatch('user/login', this.loginForm).then(() => {
+            sessionStorage.setItem('user', this.loginForm.username)
             this.$router.push({ path: this.redirect || '/' })
             this.loading = false
           }).catch(() => {
@@ -180,7 +181,10 @@ $light_gray:#eee;
 .login-container {
   min-height: 100%;
   width: 100%;
-  background-color: $bg;
+  // background-color: $bg;
+  background-image: url('../../assets/bg_picture.jpeg');
+  background-size: 100% 100%;
+
   overflow: hidden;
 
   .login-form {

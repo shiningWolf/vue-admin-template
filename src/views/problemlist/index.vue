@@ -179,7 +179,7 @@ export default {
   },
   computed: {
     problemTypes() {
-      return [...new Set(this.list.map(item => item.type))].map(v => {
+      return [...new Set(Object.values(this.branchObj).map(item => item.type))].map(v => {
         return { text: v, value: v };
       });
     }
@@ -249,7 +249,7 @@ export default {
       return row.status === value;
     },
     filterTypes(value, row) {
-      return row.type === value;
+      return row.branchObj.type === value;
     },
     showHistory() {
       this.dialogHistoryVisible = true;
